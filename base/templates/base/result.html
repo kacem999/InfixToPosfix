@@ -1,0 +1,71 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="">
+<head>
+    <title>Add Numbers</title>
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+</head>
+<body>
+<h1>Convert Infex to Postfex</h1>
+<form class="form" method="post" action="{% url 'Home' %}">
+    {% csrf_token %}
+    <label for="number1">Infex:</label>
+    <input type="text" id="number1" name="number1" required><br>
+    <button type="submit">Convert</button>
+</form>
+{% if result %}
+    <div class="container">
+        <p>The Infix is: <span class="res">{{ result2 }}</span></p>
+        <p>The Postfix is: <span class="res">{{ result }}</span></p>
+        {% load filters %}
+        {% block big_box_content %}
+            <div id="result-container" class="big-box">
+                {% for dict in result3 %}
+                    {% if dict.op == '¬' %}
+                        <div class="box">
+                            <div class="no op">{{ dict.op }}</div>
+                            {% if not dict.direct|is_integer %}
+                                <span class="dirct">{{ dict.direct }}</span>
+                            {% endif %}
+                        </div>
+                    {% elif dict.right|is_integer and dict.left|is_integer %}
+                        <div class="box">
+                            <div class="op">{{ dict.op }}</div>
+                        </div>
+                    {% elif  dict.right|is_integer %}
+                        <div class="box">
+                            <div class="op rg">{{ dict.op }}</div>
+                            <span class="left">{{ dict.left }}</span>
+                        </div>
+                    {% elif dict.left|is_integer %}
+                        <div class="box">
+                            <div class="op lf">{{ dict.op }}</div>
+                            <span class="right">{{ dict.right }}</span>
+                        </div>
+                    {% else %}
+                        <div class="box">
+                            <div class="op to-right">{{ dict.op }}</div>
+                            <span class="be-left">{{ dict.left }}</span>
+                            <span class="be-right">{{ dict.right }}</span>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+                <div style="font-size: 0">{{ result3.clear }}</div>
+            </div>
+        {% endblock %}
+    </div>
+    <form class="form eva-form" method="post" action="{% url 'eval' %}">
+        {% csrf_token %}
+        {% for ele in result4 %}
+            <label for="{{ ele }}">{{ ele }}:</label>
+            <select class="form-select" aria-label="Disabled select example" id="{{ ele }}" name="{{ ele }}" required>
+                <option value="F">F</option>
+                <option value="V">V</option>
+            </select><br>
+        {% endfor %}
+        <div style="font-size: 0">{{ result4.clear }}</div>
+        <button type="submit">Evaluate</button>
+    </form>
+{% endif %}
+</body>
+</html>

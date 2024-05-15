@@ -1,0 +1,29 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.2.0/css/all.css">
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+</head>
+</head>
+<body>
+{% block content %}
+    {% if result5 %}
+        {% if result5 == 'V' %}
+            <div class="img-container">
+                <p class="true-text">Your Logic Is</p>
+                <img src="{% static 'images/true.png' %}" alt="">
+            </div>
+
+        {% else %}
+            <div class="img-container">
+                <p class="false-text">Your Logic Is</p>
+                <img src="{% static 'images/false.png' %}" alt="">
+            </div>
+        {% endif %}
+    {% endif %}
+{% endblock %}
+</body>
+</html>
